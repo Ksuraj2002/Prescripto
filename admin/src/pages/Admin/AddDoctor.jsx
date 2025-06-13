@@ -52,11 +52,25 @@ const AddDoctor = () => {
             
             if(data.success){
                 toast.success(data.message)
+                setDocImg(false)
+                setName('')
+                setPassword('')
+                setEmail('')
+                setAddress1('')
+                setAddress2('')
+                setDegree('')
+                setAbout('')
+                setFees('')
+
             }else {
                 toast.error(data.message)
+               
             }
 
         } catch (error) {
+
+            toast.error(error.message)
+            console.log(error)
             
         }
     }
@@ -93,7 +107,7 @@ const AddDoctor = () => {
 
                         <div className='flex-1 flex flex-col gap-1'>
                             <p>Experience</p>
-                            <select onChange={(e)=> setExperience(e.target.value)} value={experience} className='border rounded px-3 py-2'  name="" id="">
+                            <select onChange={(e)=> setExperience(e.target.value)} value={experience} className='border rounded px-3 py-2'  name="" >
                                 <option value="1">1 Year</option>
                                 <option value="2">2 Year</option>
                                 <option value="3">3 Year</option>
@@ -117,7 +131,7 @@ const AddDoctor = () => {
                         <div className='w-full lg:flex-1 flex flex-col gap-4' >
                             <div className='flex-1 flex flex-col gap-1' >
                                 <p>Speciality</p>
-                                <select onChange={(e)=> setSpeciality(e.target.value)} value={speciality} className='border rounded px-3 py-2' name="" id="">
+                                <select onChange={(e)=> setSpeciality(e.target.value)} value={speciality} className='border rounded px-3 py-2' name="">
                                     <option value="General physician">General physician</option>
                                     <option value="Gynecologist">Gynecologist</option>
                                     <option value="Dermatologist">Dermatologist</option>
