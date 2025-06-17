@@ -1,25 +1,14 @@
-import React, { useState } from 'react'
-import { assets } from '../assets/assets'
+import React, { useContext, useState } from 'react'
+import { AppContext } from '../context/AppContext'
 
 const MyProfile = () => {
 
-  const [userData, setUserData] = useState({
-    name: "Ramesh Vincent",
-    image: assets.profile_pic,
-    email: "ramesh@gmail.com",
-    phone: "+1 3975 309587",
-    address: {
-      line1: "54th Cross, Sector 143",
-      line2: "Circle, Church Road, Delhi"
-    },
-    gender: 'Male',
-    dob: '1999-01-25'
-  })
+  const {userData,setUserData} = useContext(AppContext)
 
   const [isEdit, setIsEdit] = useState(false)
 
 
-  return (
+  return userData && (
     <div className='max-w-lg flex flex-col gap-2 text-sm'>
 
       <img className='w-36 rounded' src={userData.image} alt="" />
