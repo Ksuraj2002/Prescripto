@@ -4,7 +4,7 @@ export const AppContext = createContext()
 
 const AppContextProvider = (props) => {
 
-    const currency = '$'
+    const currency = 'Rs.'
 
     const calculateAge = (dob) => {
 
