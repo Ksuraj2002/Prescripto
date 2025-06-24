@@ -9,7 +9,7 @@ const Dashboard = () => {
 
   const { dashData, getDashData, cancelAppointment, aToken } = useContext(AdminContext)
 
-  const {slotDateFormat} = useContext(AppContext)
+  const { slotDateFormat } = useContext(AppContext)
 
   useEffect(() => {
 
@@ -22,7 +22,7 @@ const Dashboard = () => {
   return dashData && (
     <div className='m-5'>
 
-      
+
       <div className='flex flex-wrap gap-3'>
         <div className='flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
           <img className='w-14' src={assets.doctor_icon} alt="" />
@@ -69,16 +69,15 @@ const Dashboard = () => {
                   <p className='text-gray-600'>{slotDateFormat(item.slotDate)} </p>
 
                 </div>
-                
-             
 
-              {
-                item.cancelled
-                ? <p className='text-red-400 text-xs font-medium'>Cancelled</p>
-                : <img onClick={() => cancelAppointment(item._id)} className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />
-              }
+                {item.cancelled
+                  ? <p className='text-red-400 text-xs font-medium'>Cancelled</p>
+                  : item.isCompleted
+                    ? <p className='text-green-500 text-xs font-medium'>Completed</p>
+                    : <img onClick={() => cancelAppointment(item._id)} className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />
+                }
 
-               </div>
+              </div>
 
             ))
           }
