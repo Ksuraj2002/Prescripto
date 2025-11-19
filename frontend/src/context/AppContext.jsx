@@ -2,6 +2,8 @@ import { createContext, useEffect, useState } from "react";
 import axios from 'axios'
 import {toast} from 'react-toastify'
 
+
+
 export const AppContext = createContext()
 
 const AppContextProvider = (props) => {
@@ -13,6 +15,7 @@ const AppContextProvider = (props) => {
     const [doctors,setDoctors] = useState([])
     const [token,setToken] = useState(localStorage.getItem('token')?localStorage.getItem('token'):false)
     const [userData, setUserData] = useState(false)
+    
 
     const getDoctorsData = async () => {
 
@@ -52,6 +55,25 @@ const AppContextProvider = (props) => {
         }
     }
 
+
+   
+    const logout = async () => {
+        try {
+            
+            // 2. Clear local token (needed for traditional Auth)
+            localStorage.removeItem('token'); 
+
+            setToken(false);
+            setUserData(false);
+            toast.success('Logged out successfully.');
+
+        } catch (error) {
+            console.error('Logout failed:', error);
+            toast.error('Logout failed.');
+        }
+    };
+    // === END: NEW FUNCTION FOR UNIFIED LOGOUT ===
+
     const value = {
         doctors,getDoctorsData,
         currencySymbol,
@@ -59,7 +81,10 @@ const AppContextProvider = (props) => {
         backendUrl,
         userData,setUserData,
         loadUserProfileData,
+        logout,
     }
+
+    
 
     useEffect(() => {
         getDoctorsData()
@@ -74,6 +99,8 @@ const AppContextProvider = (props) => {
         }
 
     },[token])
+
+   
 
     return (
         <AppContext.Provider value={value}>

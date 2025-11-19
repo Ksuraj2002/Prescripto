@@ -3,6 +3,8 @@ import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import { GoogleOAuthProvider,GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode"
 
 const Login = () => {
 
@@ -14,13 +16,21 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
 
+  const DisplayMessage = (message, type = 'error') => {
+      if (type === 'error') {
+          toast.error(message);
+      } else {
+          toast.success(message);
+      }
+  };
+
   const onSubmitHandler = async (event) => {
     event.preventDefault()
 
     try {
 
       if(state === 'Sign Up'){
-        const {data} = await axios.post(backendUrl + '/api/user/register', {name,email,password})
+        const {data} = await axios.post(backendUrl + '/api/auth/register', {name,email,password})
         if(data.success){
           localStorage.setItem('token',data.token)
           setToken(data.token)
@@ -30,7 +40,7 @@ const Login = () => {
       }else {
 
 
-        const {data} = await axios.post(backendUrl + '/api/user/login', {email,password})
+        const {data} = await axios.post(backendUrl + '/api/auth/login', {email,password})
         if(data.success){
           localStorage.setItem('token',data.token)
           setToken(data.token)
@@ -47,6 +57,50 @@ const Login = () => {
 
 
   }
+
+  const handleLoginSuccess = async (credentialResponse) => {
+
+    // 1. Get the Google ID Token
+    const idToken = credentialResponse.credential;
+    
+    // Optional: Decode and log user data for debugging
+    try {
+        const user = jwtDecode(idToken);
+        console.log('Login Success! Decoded Google User Data:', user);
+    } catch (e) {
+        console.error('Error decoding JWT:', e);
+        toast.error("Google authentication failed.");
+        return; 
+    }
+
+    // 2. Send the ID Token to the Backend
+    try {
+        const url = `${backendUrl}/api/auth/google-verify`; // Ensure this is your correct backend endpoint
+        
+        const response = await axios.post(url, { 
+            idToken: idToken 
+        });
+
+        const data = response.data;
+
+        // 3. Handle Backend Response
+        if (data.success) {
+            // Your backend should return its own token (JWT or session ID)
+            localStorage.setItem('token', data.token); 
+            setToken(data.token); // Update state
+            toast.success(data.message || "Google login successful!");
+            // Navigate to the protected route
+        } else {
+            // Backend failed verification or registration
+            toast.error(data.message || "Google authentication failed on server.");
+        }
+    } catch (error) {
+        console.error('Error sending token to backend:', error);
+        // Display a user-friendly error
+        toast.error("An error occurred during Google sign-in. Please try again.");
+    }
+     
+    };
 
   useEffect(()=> {
     if(token){
@@ -83,6 +137,26 @@ const Login = () => {
           <p>Already have an account? <span onClick={()=> setState('Login')} className='text-primary underline cursor-pointer'>Login here</span> </p>
           : <p>Create a new account? <span onClick={()=> setState('Sign Up')} className='text-primary underline cursor-pointer'>click here</span></p>
         }
+
+        <div className="mt-4 text-center text-sm">
+          <span>or login with</span>
+        </div>
+
+        {/* <div className="flex justify-center mt-2">
+          <GoogleLogin onSuccess={handleGoogleLogin} onError={() => DisplayMessage("Google login failed", "error")} />
+        </div> */}
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <div className="App">
+                <h2>Login with Google</h2>
+                <GoogleLogin
+                    onSuccess={handleLoginSuccess}
+                    onError={() => DisplayMessage("Google login failed", "error")}
+                    useOneTap
+                />
+                {/* <button onClick={() => googleLogout()}>Logout</button> */}
+            </div>
+        </GoogleOAuthProvider>
+
       </div>
     </form>
   )

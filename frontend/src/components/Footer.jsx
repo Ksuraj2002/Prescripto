@@ -11,9 +11,8 @@ const Footer = () => {
             <div>
 
                 <img className='mb-5 w-40' src={assets.logo} alt="" />
-                <p className='w-full md:w-2/3 text-gray-600 leading-6'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                    Ipsum has been the industry's dummy text ever since the 1500s, when an unknown printer took a gallery of type and scrambled it to make a type 
-                    specimen book.
+                <p className='w-full md:w-2/3 text-gray-600 leading-6'>Prescripto is a seamless online platform designed to simplify the process of finding and booking appointments with doctors and healthcare specialists.
+We connect patients to a wide network of verified practitioners, allowing users to effortlessly check doctor availability, view professional profiles, and schedule consultations—all from the comfort of their home.
                 </p>
 
 

@@ -20,7 +20,6 @@ const SpecialityMenu = () => {
 
 
         </div>
-``
     </div>
   )
 }
