@@ -38,7 +38,7 @@ We connect patients to a wide network of verified practitioners, allowing users 
             <div>
                 <p className='text-xl font-medium mb-5'>GET IN TOUCH</p>
                 <ul className='flex flex-col gap-2 text-gray-600'>
-                    <li>+1-212-3480-349</li>
+                    <li>+91-9905441238</li>
                     <li>prescripto@gmail.com</li>
                 </ul>
             </div>
